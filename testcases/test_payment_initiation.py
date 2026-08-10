@@ -13,11 +13,10 @@ def auth_headers(base_url):
     access_token = response.json().get("access_token")
     return {"Authorization": f"Bearer {access_token}"}
 
-def test_user_authentication(base_url, auth_headers):
+def test_user_login(base_url, auth_headers):
     with Session() as session:
-        session.headers.update(auth_headers)
-        response = session.get(f"{base_url}/dashboard")
+        response = session.get(f"{base_url}/dashboard", headers=auth_headers)
         assert response.status_code == 200
 ```
 
-Note: This script assumes a login endpoint that returns an access token and a dashboard endpoint. The actual implementation details (like API endpoints, authentication logic) should be adjusted according to the real application's requirements.
+Note: This script assumes a login endpoint that returns an access token and a dashboard endpoint. The actual implementation details (like API endpoints, authentication logic) should be adjusted according to the application's requirements.
