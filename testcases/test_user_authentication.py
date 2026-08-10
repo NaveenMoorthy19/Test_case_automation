@@ -15,9 +15,8 @@ def auth_headers(base_url):
 
 def test_user_login(base_url, auth_headers):
     with Session() as session:
-        session.headers.update(auth_headers)
-        response = session.get(f"{base_url}/dashboard")
+        response = session.get(f"{base_url}/dashboard", headers=auth_headers)
         assert response.status_code == 200
 ```
 
-Note: The above script assumes a login endpoint at `/login` that returns an access token and a dashboard endpoint at `/dashboard`. Adjust the URLs and authentication logic as per your actual API.
+Note: This script assumes a login endpoint that returns an access token and a dashboard endpoint. The actual implementation details (like API endpoints, authentication logic) should be adjusted according to the application's requirements.
