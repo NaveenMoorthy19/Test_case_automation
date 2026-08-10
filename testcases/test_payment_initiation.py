@@ -20,4 +20,4 @@ def test_user_authentication(base_url, auth_headers):
         assert response.status_code == 200
 ```
 
-Note: The above script assumes a login endpoint at `/login` that returns an access token and a dashboard endpoint at `/dashboard`. Adjust the URLs and authentication logic as per your actual API structure.
+Note: This script assumes a login endpoint that returns an access token and a dashboard endpoint. The actual implementation details (like API endpoints, authentication logic) should be adjusted according to the real application's requirements.
