@@ -1,22 +1,23 @@
 ```python
 import pytest
-from requests import Session
+from requests import post
 
 @pytest.fixture
-def base_url():
-    return "https://example.com/api"
+def auth_headers(requests_session):
+    return {
+        'Authorization': 'Bearer YOUR_ACCESS_TOKEN'
+    }
 
-@pytest.fixture
-def auth_headers(base_url):
-    session = Session()
-    response = session.post(f"{base_url}/login", json={"username": "user123", "password": "pass456"})
-    access_token = response.json().get("access_token")
-    return {"Authorization": f"Bearer {access_token}"}
-
-def test_user_login(base_url, auth_headers):
-    with Session() as session:
-        response = session.get(f"{base_url}/dashboard", headers=auth_headers)
-        assert response.status_code == 200
+@pytest.mark.usefixtures("auth_headers")
+def test_user_login_valid_credentials(base_url, requests_session):
+    response = requests_session.post(f"{base_url}/login", json={"username": "user@example.com", "password": "securepassword"})
+    
+    assert response.status_code == 200
+    assert 'access_token' in response.json()
+    
+    # Assuming dashboard endpoint requires access token for authorization
+    dashboard_response = requests_session.get(f"{base_url}/dashboard", headers=response.json()['headers'])
+    assert dashboard_response.status_code == 200
 ```
 
-Note: This script assumes a login endpoint that returns an access token and a dashboard endpoint. The actual implementation details (like API endpoints, authentication logic) should be adjusted according to the application's requirements.
+Note: Replace `YOUR_ACCESS_TOKEN` with actual access token and ensure the base URL is correctly set in your environment.
